@@ -54,6 +54,7 @@
   ::-webkit-scrollbar-thumb{background:var(--teal);border-radius:3px;border:3px solid var(--sand2);}
   ::-webkit-scrollbar-thumb:hover{background:var(--teal-d);}
   body{margin:0;background:var(--sand-g);background-image:linear-gradient(180deg,var(--sand-g) 0%,var(--sand-g) 12%,var(--sand2-g) 42%,var(--sand2-g) 62%,var(--sand-g) 88%);background-attachment:fixed;color:var(--ink);font-family:var(--fbody);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;line-height:1.6;}
+  @media(max-width:768px){body{background-image:none;background-attachment:scroll;}}
   /* barely-there paper grain to warm the sand */
   body::before{content:"";position:fixed;inset:0;z-index:43;pointer-events:none;opacity:.045;mix-blend-mode:multiply;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px 180px;}
@@ -331,6 +332,10 @@
     .hero h1{letter-spacing:.012em;}
     .hero h1 .wm-matt,.hero h1 .wm-terry{margin-right:-.012em;}
   }
+  /* phones: the scroll cue lands on top of the panorama — drop it (touch users don't need the hint) */
+  @media(max-width:700px){
+    .scrollcue{display:none;}
+  }
   /* short viewports (landscape phones, shallow windows): compact the hero's vertical rhythm so wordmark + panorama share the fold */
   @media(max-height:560px){
     .hero{padding-top:52px;}
@@ -369,12 +374,13 @@
 .prose p.first{margin-top:24px;}
 .planks{margin-top:34px;display:flex;flex-direction:column;gap:10px;}
 .plank{border:1px solid rgba(var(--c-line),.16);border-radius:16px;background:rgba(var(--c-glass),.4);overflow:hidden;transition:border-color .15s,box-shadow .2s,transform .12s;}
-.plank:hover{border-color:rgba(var(--c-line),.3);transform:translateY(-1px);box-shadow:0 16px 40px -30px rgba(40,38,30,.5);}
+@media (hover:hover){.plank:hover{border-color:rgba(var(--c-line),.3);transform:translateY(-1px);box-shadow:0 16px 40px -30px rgba(40,38,30,.5);}}
 .plank[open]{box-shadow:0 16px 40px -30px rgba(40,38,30,.5);border-color:rgba(var(--c-line),.28);transform:none;}
 .plank>summary{list-style:none;cursor:pointer;padding:12px 22px;display:grid;grid-template-columns:1fr auto;column-gap:20px;align-items:start;}
 .plank>summary::-webkit-details-marker{display:none;}
 .plank>summary h3{grid-column:1;grid-row:1;font-family:var(--fhead);font-weight:800;font-size:clamp(19px,2vw,23px);letter-spacing:.015em;line-height:1.24;color:var(--ink);}
-.plank[open]>summary h3,.plank:hover>summary h3{color:var(--teal);}
+.plank[open]>summary h3{color:var(--teal);}
+@media (hover:hover){.plank:hover>summary h3{color:var(--teal);}}
 .plank .ask{grid-column:1;grid-row:2;display:block;font-size:15.5px;line-height:1.4;color:rgb(var(--c-fgsoft));margin-top:2px;max-width:none;text-wrap:pretty;}
 .plank .sign{grid-column:2;grid-row:1 / span 2;align-self:start;width:11px;height:11px;border-right:2px solid var(--teal);border-bottom:2px solid var(--teal);transform:rotate(45deg);margin-top:8px;transition:transform .25s;}
 .plank[open] .sign{transform:rotate(225deg);}
@@ -419,13 +425,14 @@
   .rsaid p{font-size:16.5px;line-height:1.66;color:rgb(var(--c-fg));margin-top:14px;text-wrap:pretty;}
   .rsaid p:first-child{margin-top:0;}
   .rcard{border:1px solid rgba(var(--c-line),.16);border-radius:16px;background:rgba(var(--c-glass),.4);overflow:hidden;transition:border-color .15s,box-shadow .2s,transform .12s;}
-  .rcard:hover{border-color:rgba(var(--c-line),.3);transform:translateY(-1px);box-shadow:0 16px 40px -30px rgba(40,38,30,.5);}
+  @media (hover:hover){.rcard:hover{border-color:rgba(var(--c-line),.3);transform:translateY(-1px);box-shadow:0 16px 40px -30px rgba(40,38,30,.5);}}
   .rcard[open]{box-shadow:0 16px 40px -30px rgba(40,38,30,.5);border-color:rgba(var(--c-line),.28);transform:none;}
   .rcard>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr auto;column-gap:20px;row-gap:2px;align-items:start;padding:12px 22px;}
   .rcard>summary::-webkit-details-marker{display:none;}
   .rcard>summary .rmeta{grid-column:1;grid-row:2;display:block;margin-top:2px;}
   .rcard .rtt{grid-column:1;grid-row:1;margin:0;font-family:var(--fhead);font-weight:800;font-size:clamp(19px,2vw,23px);letter-spacing:.015em;line-height:1.24;color:var(--ink);text-wrap:pretty;}
-  .rcard[open] .rtt,.rcard:hover .rtt{color:var(--teal);}
+  .rcard[open] .rtt{color:var(--teal);}
+  @media (hover:hover){.rcard:hover .rtt{color:var(--teal);}}
   .rcard .chev{grid-column:2;grid-row:1 / span 2;align-self:start;width:11px;height:11px;border-right:2px solid var(--teal);border-bottom:2px solid var(--teal);transform:rotate(45deg);margin-top:8px;transition:transform .25s;}
   .rcard[open] .chev{transform:rotate(225deg);}
   .rcard .rbody{padding:0 22px 24px;}
@@ -1092,8 +1099,10 @@
 
   /* the panorama's ground fill must match the BODY's fixed-attachment gradient behind it (sand 0-12%, sand2 42-62%, sand 88-100% of the viewport), or the slab under the pano reads as a different color from the page below — sample that gradient at the svg's current viewport position */
   var gndBGA=null, gndBG2A=null, gndShade=1; // gndShade: dayness 0..1 — by day the ground is tinted slightly darker/warmer than the sky at the groundline (earth vs air, like the night contrast), easing back to the exact body colour by the pano's bottom edge so the page below still meets it seamlessly
+  var FLATBG=window.matchMedia('(max-width:768px)');
   function bodyColAt(f){
     var a=gndBGA,b=gndBG2A;
+    if(FLATBG.matches) return a.join(',');
     function mix(u){ return Math.round(a[0]+(b[0]-a[0])*u)+','+Math.round(a[1]+(b[1]-a[1])*u)+','+Math.round(a[2]+(b[2]-a[2])*u); }
     if(f<=0.12) return mix(0); if(f<0.42) return mix((f-0.12)/0.30); if(f<=0.62) return mix(1); if(f<0.88) return mix(1-(f-0.62)/0.26); return mix(0);
   }
@@ -1155,8 +1164,10 @@
     if(hero){
       var gp=86, go=90, pw=hero.querySelector('.hero-pano-wrap'), pn=document.getElementById('hero-pano');
       if(pw&&pn&&hero.offsetHeight){ var ph=pn.getBoundingClientRect().height; if(ph){ var hh=hero.offsetHeight; gp=Math.max(50,Math.min(97,(pw.offsetTop+ph*(95.9/166))/hh*100)); go=Math.max(gp,Math.min(98.5,(pw.offsetTop+ph*(139/166))/hh*100)); } }
+      var gsh=1-night, SH0=[0.945,0.935,0.912];
+      var tail=bgArr.map(function(c,i){ return Math.round(c*(1-(1-SH0[i])*gsh)); }).join(',');
       var hb=hero.querySelector('.hero-bg');
-      if(hb) hb.style.background='linear-gradient(180deg, rgb('+bg+') 0%, rgb('+bg+') '+(gp*0.52).toFixed(1)+'%, rgb('+skyMid+') '+(gp*0.80).toFixed(1)+'%, rgb('+horizon+') '+gp.toFixed(1)+'%, rgb('+horizon+') '+go.toFixed(1)+'%, rgba('+bg+',0) '+(go+2).toFixed(1)+'%, rgba('+bg+',0) 100%)';
+      if(hb) hb.style.background='linear-gradient(180deg, rgb('+bg+') 0%, rgb('+bg+') '+(gp*0.52).toFixed(1)+'%, rgb('+skyMid+') '+(gp*0.80).toFixed(1)+'%, rgb('+horizon+') '+gp.toFixed(1)+'%, rgb('+horizon+') '+go.toFixed(1)+'%, rgba('+tail+',0) '+(go+2).toFixed(1)+'%, rgba('+tail+',0) 100%)';
     }
     var tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content','rgb('+bg+')');
     gndShade=1-night;
