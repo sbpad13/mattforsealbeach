@@ -53,7 +53,7 @@
   ::-webkit-scrollbar-track{background:var(--sand2);}
   ::-webkit-scrollbar-thumb{background:var(--teal);border-radius:3px;border:3px solid var(--sand2);}
   ::-webkit-scrollbar-thumb:hover{background:var(--teal-d);}
-  body{margin:0;background:var(--sand-g);background-image:linear-gradient(180deg,var(--sand-g) 0%,var(--sand-g) 12%,var(--sand2-g) 42%,var(--sand2-g) 62%,var(--sand-g) 88%);background-attachment:fixed;color:var(--ink);font-family:var(--fbody);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;line-height:1.6;}
+  body{margin:0;background:var(--sand-g);background-attachment:fixed;color:var(--ink);font-family:var(--fbody);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;line-height:1.6;}
   @media(max-width:768px){body{background-image:none;background-attachment:scroll;}}
   /* barely-there paper grain to warm the sand */
   body::before{content:"";position:fixed;inset:0;z-index:43;pointer-events:none;opacity:.045;mix-blend-mode:multiply;
@@ -1099,7 +1099,7 @@
 
   /* the panorama's ground fill must match the BODY's fixed-attachment gradient behind it (sand 0-12%, sand2 42-62%, sand 88-100% of the viewport), or the slab under the pano reads as a different color from the page below — sample that gradient at the svg's current viewport position */
   var gndBGA=null, gndBG2A=null, gndShade=1; // gndShade: dayness 0..1 — by day the ground is tinted slightly darker/warmer than the sky at the groundline (earth vs air, like the night contrast), easing back to the exact body colour by the pano's bottom edge so the page below still meets it seamlessly
-  var FLATBG=window.matchMedia('(max-width:768px)');
+  var FLATBG={matches:true};   // the page background under the pano is a single flat tone, so the ground plane inside the SVG and the page below it are the same colour at every scroll position — no line at the pano's edge
   function bodyColAt(f){
     var a=gndBGA,b=gndBG2A;
     if(FLATBG.matches) return a.join(',');
@@ -1122,6 +1122,9 @@
     s1.setAttribute('stop-color','rgb('+cB.join(',')+')');
   }
   window.addEventListener('scroll', updateGroundFill, {passive:true});   // the body gradient is viewport-fixed — re-sample as the pano moves past it
+  (function(){   // the pano is sized asynchronously by the draw-in engine — re-sample the ground fill once it has a height
+    var n=0, iv=setInterval(function(){ updateGroundFill(); if(++n>100) clearInterval(iv); },100);
+  })();
 
   /* during the sky-wheel cross-dissolve the ground fill (which paints ABOVE the wheel) cannot alpha-fade to match the page below (which blends BELOW the wheel — different compositing math → a line at the hero boundary). Instead it stays opaque and is COLORED as the exact expected blend: wheelColor*op + pageColor*(1-op). The wheel is always level while translucent, so its on-screen color at any y is computable from its stop list. */
   var WSTOPS=[[0,11,22,32],[24,18,35,47],[44,29,59,69],[48.6,47,76,85],[49.4,74,81,87],[49.8,111,97,84],[50.2,149,116,90],[50.8,194,168,132],[51.8,221,202,166],[71,232,219,195],[88,239,230,208],[100,241,235,223]];
