@@ -187,7 +187,8 @@
   .draw #hero-pano{clip-path:none;}
   .draw:not(.ready) .hero-pano-wrap::before{content:none;}
   .draw.ready #hero-pano{clip-path:none;}
-  .scrollcue{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:2;font-family:var(--fmono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:rgb(var(--c-fgdim));display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .scrollcue{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:2;font-family:var(--fmono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:rgb(var(--c-fgdim));display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;padding:8px 16px;-webkit-tap-highlight-color:transparent;}
+  .scrollcue:hover{color:var(--ink);}
   .scrollcue .dot{width:1px;height:26px;background:linear-gradient(var(--ink),transparent);animation:cue 1.8s ease-in-out infinite;}
   @keyframes cue{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
 
@@ -332,9 +333,10 @@
     .hero h1{letter-spacing:.012em;}
     .hero h1 .wm-matt,.hero h1 .wm-terry{margin-right:-.012em;}
   }
-  /* phones: the scroll cue lands on top of the panorama — drop it (touch users don't need the hint) */
+  /* phones: keep the cue, tightened so it clears the panorama — it doubles as a tap target to the first section */
   @media(max-width:700px){
-    .scrollcue{display:none;}
+    .scrollcue{bottom:8px;font-size:9.5px;letter-spacing:.2em;gap:5px;padding:6px 14px;}
+    .scrollcue .dot{height:15px;}
   }
   /* short viewports (landscape phones, shallow windows): compact the hero's vertical rhythm so wordmark + panorama share the fold */
   @media(max-height:560px){
@@ -480,7 +482,7 @@
   <div class="hero-pano-wrap">
     <svg id="hero-pano" class="pano" role="img" aria-label="A continuous line drawing of Seal Beach District One: the pier, the lifeguard tower, Main Street and the Red Car"></svg>
   </div>
-  <div class="scrollcue" aria-hidden="true"><span>Scroll</span><span class="dot"></span></div>
+  <a class="scrollcue" href="#story" aria-label="Scroll to About me"><span>Scroll</span><span class="dot"></span></a>
 </header>
 
 <main id="main">
@@ -1122,8 +1124,15 @@
     s1.setAttribute('stop-color','rgb('+cB.join(',')+')');
   }
   window.addEventListener('scroll', updateGroundFill, {passive:true});   // the body gradient is viewport-fixed — re-sample as the pano moves past it
-  (function(){   // the pano is sized asynchronously by the draw-in engine — re-sample the ground fill once it has a height
-    var n=0, iv=setInterval(function(){ updateGroundFill(); if(++n>100) clearInterval(iv); },100);
+  (function(){   // the pano is sized asynchronously by the draw-in engine — re-run the theme (which anchors
+    // the hero sky gradient to the drawn groundline) and the ground fill once it has a real height
+    var n=0, iv=setInterval(function(){
+      var pn=document.getElementById('hero-pano');
+      var h=pn?pn.getBoundingClientRect().height:0;
+      updateGroundFill();
+      if(h&&typeof tick==='function'){ tick(); clearInterval(iv); }
+      else if(++n>100) clearInterval(iv);
+    },100);
   })();
 
   /* during the sky-wheel cross-dissolve the ground fill (which paints ABOVE the wheel) cannot alpha-fade to match the page below (which blends BELOW the wheel — different compositing math → a line at the hero boundary). Instead it stays opaque and is COLORED as the exact expected blend: wheelColor*op + pageColor*(1-op). The wheel is always level while translucent, so its on-screen color at any y is computable from its stop list. */
@@ -1165,12 +1174,16 @@
     // ONE continuous sky, anchored to the panorama's REAL groundline (pier_ground y=95.9 in the 166-tall viewBox):
     // page-bg up top -> gentle sky -> horizon glow ENDING exactly at the drawn groundline -> below the line it's the page background again (the beach/ocean strokes sit on it), fading to transparent so the hero meets the body's own (fixed-attachment) gradient with no seam
     if(hero){
-      var gp=86, go=90, pw=hero.querySelector('.hero-pano-wrap'), pn=document.getElementById('hero-pano');
-      if(pw&&pn&&hero.offsetHeight){ var ph=pn.getBoundingClientRect().height; if(ph){ var hh=hero.offsetHeight; gp=Math.max(50,Math.min(97,(pw.offsetTop+ph*(95.9/166))/hh*100)); go=Math.max(gp,Math.min(98.5,(pw.offsetTop+ph*(139/166))/hh*100)); } }
+      var gp=86, go=90, gb=100, pw=hero.querySelector('.hero-pano-wrap'), pn=document.getElementById('hero-pano');
+      var ph=(pw&&pn&&hero.offsetHeight)?pn.getBoundingClientRect().height:0;
+      if(ph){ var hh=hero.offsetHeight; gp=Math.max(50,Math.min(97,(pw.offsetTop+ph*(95.9/166))/hh*100)); go=Math.max(gp,Math.min(98.5,(pw.offsetTop+ph*(139/166))/hh*100)); gb=Math.min(100,(pw.offsetTop+ph)/hh*100); }
+      // the fade to transparent must finish ON the pano's bottom edge — past it the warm horizon tone
+      // would paint over the page background and read as a line under the drawing (phone proportions)
+      var gf=Math.max(go,Math.min(gb,go+2));
       var gsh=1-night, SH0=[0.945,0.935,0.912];
       var tail=bgArr.map(function(c,i){ return Math.round(c*(1-(1-SH0[i])*gsh)); }).join(',');
       var hb=hero.querySelector('.hero-bg');
-      if(hb) hb.style.background='linear-gradient(180deg, rgb('+bg+') 0%, rgb('+bg+') '+(gp*0.52).toFixed(1)+'%, rgb('+skyMid+') '+(gp*0.80).toFixed(1)+'%, rgb('+horizon+') '+gp.toFixed(1)+'%, rgb('+horizon+') '+go.toFixed(1)+'%, rgba('+tail+',0) '+(go+2).toFixed(1)+'%, rgba('+tail+',0) 100%)';
+      if(hb&&ph) hb.style.background='linear-gradient(180deg, rgb('+bg+') 0%, rgb('+bg+') '+(gp*0.52).toFixed(1)+'%, rgb('+skyMid+') '+(gp*0.80).toFixed(1)+'%, rgb('+horizon+') '+gp.toFixed(1)+'%, rgb('+horizon+') '+go.toFixed(1)+'%, rgba('+tail+',0) '+gf.toFixed(1)+'%, rgba('+tail+',0) 100%)';
     }
     var tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute('content','rgb('+bg+')');
     gndShade=1-night;
@@ -1530,7 +1543,8 @@
     function setNight(){ var tt=(manualT==null?currentT():manualT); nightNow=(1-Math.cos(2*Math.PI*darkPhase(tt)))/2; }
     function scrub(p,style){ setNight(); plan(style||'pen'); if(p<=0){hideAll();} else if(p>=1){showAll();} else { hideAll(); applyProgress(clmp(p,0,1),null); } }
     var rafId=0, timer=0, finished=true;
-    function finish(ramp){ if(finished) return; finished=true; if(rafId){cancelAnimationFrame(rafId);rafId=0;} if(timer){clearTimeout(timer);timer=0;} showAll(); if(ramp){ revealActive=false; } tick(); try{ if(window.__playHeroText) window.__playHeroText(); }catch(e){} }
+    function finish(ramp){ if(finished) return; finished=true; if(rafId){cancelAnimationFrame(rafId);rafId=0;} if(timer){clearTimeout(timer);timer=0;} showAll(); if(ramp){ revealActive=false; } tick(); try{ if(!textFired && window.__playHeroText) window.__playHeroText(); }catch(e){} }
+    var textFired=false;
     function play(opts){
       opts=opts||{}; var style=opts.style||'pen'; var D=Math.max(0.4,(opts.dur||3.5))*1000;
       if(reduce){ D=Math.min(D,2200); if(style==='dawn') style='story'; } // reduced-motion: still draw in, calm + quick, no clock ramp
@@ -1538,6 +1552,9 @@
       setNight(); plan(style);
       finished=false;
       hideAll();
+      // the title entrance runs alongside the panorama draw-in, not after it
+      textFired=false;
+      try{ if(window.__playHeroText){ textFired=true; window.__playHeroText(); } }catch(e){}
       var ramp=null;
       if(style==='dawn'&&canDawn()){ ramp={a0:0.66,a1:unwrap(currentT(),0.66)}; revealActive=true; applyTime(0.66); }
       var start=performance.now();
