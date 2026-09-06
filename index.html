@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script>document.documentElement.classList.add('js-anim');</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Matthew Terry for Seal Beach City Council, District One</title>
@@ -249,7 +250,8 @@
   section{padding:72px 0;position:relative;}
   h2.big{font-weight:800;font-size:clamp(34px,5.2vw,62px);letter-spacing:-.005em;max-width:14ch;text-wrap:pretty;margin-bottom:4px;}
 
-  .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);}
+  /* armed = hidden start state, only once JS takes over (no-JS keeps text visible) */
+  .js-anim .reveal{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);}
   .reveal.in{opacity:1;transform:none;}
 
   /* Pier / Meet */
@@ -363,8 +365,8 @@
     html{scroll-behavior:auto;}
     .draw #hero-pano,.draw.ready #hero-pano{clip-path:inset(0 0 0 0);transition:none;}
     .draw:not(.ready) .hero-pano-wrap::before{display:none;}
-    .reveal{opacity:1;transform:none;transition:none;}
-    .reveal>*,.reveal.in>*{opacity:1;transform:none;transition:none;}
+    .reveal,.js-anim .reveal{opacity:1;transform:none;transition:none;}
+    .reveal>*,.reveal.in>*,.js-anim .reveal>*{opacity:1;transform:none;transition:none;}
     .scrollcue .dot{animation:none;}
     .hero .tag-lbl{animation:none;background-position:200% 0;}
   }
@@ -401,11 +403,11 @@
 .plank .body2 a:hover{color:var(--m-red);text-decoration-color:var(--m-red);}
 .subhead{font-size:clamp(15px,1.5vw,17px);line-height:1.55;color:rgb(var(--c-fgsoft));margin-top:16px;max-width:none;}
 /* staggered child reveals: kicker -> headline -> prose -> callouts cascade in */
-.reveal>*{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1);}
+.js-anim .reveal>*{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1);}
 .reveal.in>*{opacity:1;transform:none;}
 .reveal.in>*:nth-child(2){transition-delay:.07s}.reveal.in>*:nth-child(3){transition-delay:.14s}.reveal.in>*:nth-child(4){transition-delay:.21s}.reveal.in>*:nth-child(5){transition-delay:.28s}.reveal.in>*:nth-child(6){transition-delay:.35s}.reveal.in>*:nth-child(7){transition-delay:.42s}.reveal.in>*:nth-child(n+8){transition-delay:.49s}
 @media (prefers-reduced-motion: reduce){
-  .reveal>*,.reveal.in>*{opacity:1;transform:none;transition:none;}
+  .reveal>*,.reveal.in>*,.js-anim .reveal>*{opacity:1;transform:none;transition:none;}
 }
 </style>
 <style>
@@ -550,13 +552,39 @@
           <p class="lbl">Why this matters</p>
           <p>Main Street is our heart and our identity. People pay a lot of money to go to Disneyland to experience Main Street U.S.A., while we get to experience the real thing every day. So, it’s important that we do everything we possibly can to ensure its success.</p>
           <p class="lbl">How I’d fix it</p>
-          <p><b>Make it easy to open a business on Main Street.</b> Main Street is built out. No new parking is coming. So requiring a new shop to supply parking that Main Street has no room for, or to pay the city instead, is just an unnecessary burden on our shops. Both requirements should be removed.</p>
-            <p><b>Make it easier to hold street events.</b> Install removable bollards on Main Street to reduce the hassle and cost of holding street events.</p>
+          <p><b>Make Main Street Parking Better.</b> A few years ago I served on the Citizen-Council Parking Advisory Ad Hoc Committee, so I’ve been deep in the weeds on parking in Old Town, and I came away clear on a few things.</p>
+          <p>First, whether you’re for or against paid parking, we have to do something different than what we have now because the parking system on Main Street is broken. Two decades ago a previous council backpedaled on implementing paid parking and left Main Street free while keeping the three adjacent lots paid. This is backwards and it’s resulted in the underuse of the lots and more traffic on Main Street.</p>
+          <p>Second, the city incorrectly looks at each parking lot from the perspective of how much money it can extract, and it consistently makes decisions about parking in one area without considering how that affects everything else. There’s more on both of those in the <a href="#parking">parking section of my priorities page</a>.</p>
+          <p>Lastly, the businesses on Main Street have to be on board with whatever gets proposed, because they’re the ones who have to live with it. Below is what I’d bring to them to start the conversation.</p>
+          <ul>
+            <li>Get rid of parking minimums and in lieu parking fees on Main Street. In lieu fees are what businesses pay when they can’t provide the required amount of parking. Both put a burden on anybody trying to open a business or keep one going. For example, last year a proposed restaurant’s in lieu fees were $140,000 up front and $4,000 a year.</li>
+            <li>Create over 200 new Main Street adjacent free parking stalls by allowing curb parking on Electric Avenue along both sides of the Greenbelt. This will make the Greenbelt a much more pleasant park too, because the parked cars separate it from traffic.</li>
+            <li>Make the lots adjacent to Main Street free and Main Street paid. Charge for the parking people want and give away the parking people don’t want but will take. Free parking doesn’t go away. It just moves.</li>
+            <li>Make the first 24 minutes free for all parking on Main Street to allow for quick grab and go. This will significantly help the shops that cater to it, because right now there are a very limited number of 24-minute spaces.</li>
+            <li>Adjust the rates to match demand, like summer and winter or weekday and weekend, so we don’t end up with empty parking on slower days.</li>
+            <li>Reinvest all the money paid parking brings in back into Main Street.</li>
+          </ul>
+          <p>I know no one wants to hear this, but Main Street is basically the poster child for paid parking because street parking is nearly full every day. Sometimes on days when every parking spot on Main Street is taken, it feels like there are more parked cars than people on Main Street. That’s not good. Paid parking ensures the people parking in those spots are there to shop and dine.</p>
+          <p><b>Make it easier to hold street events.</b> Install removable bollards on Main Street to reduce the hassle and cost of holding street events.</p>
             <p><b>Turn the development across the river into Main Street customers.</b> Love it or hate it, when all the development across the river is finished, we are going to have thousands of new neighbors. That’s thousands of potential Main Street customers, but we need them to get here without their cars. Long Beach currently has a bike share program that stops at the city line. If elected, I would explore a partnership with Long Beach to let the bikes in, with docking stations strategically placed adjacent to Main Street to ensure the bikes end up where they’re supposed to and not on the sidewalk. That’ll give our new neighbors a way to get to Main Street without adding to traffic or taking up parking.</p>
             <p><b>Simplify sidewalk permits for shops.</b> The process for a business to get a permit from the city to put out tables or merchandise racks on the sidewalk is immensely overcomplicated. As I mentioned <a href="https://www.youtube.com/watch?v=jxaa60P0dT4&amp;t=1218s" target="_blank" rel="noopener">at the Planning Commission meeting when this was first proposed</a>, the process should be as simple as paying a fee, signing an agreement and following the rules.</p>
             <p><b>Modernize the Main Street Specific Plan.</b> It’s the plan that governs everything on Main Street, and it’s out of date. It was written in the 1990s and has only been patched piecemeal since. It’s time for a full review.</p>
             <p><b>Give Main Street properties more ways to earn, so shops don’t carry it all.</b> Rents are high on Main Street, and on many parcels a single shop is carrying the whole property by itself. I would work with both the property owners and the shops to see how the city could encourage building housing on parcels that have room for it in the back. Building housing gives a parcel a secondary source of income, with the added benefit of more customers for Main Street. When a parcel earns from housing too, the shop’s rent no longer has to cover the whole property.</p>
             <p><b>Finish the Local Coastal Program.</b> Seal Beach should be able to make its own decisions about Main Street, but right now the Coastal Commission has the final say. We need to finish our Local Coastal Program so the final say belongs to us.</p>
+        </div>
+      </details>
+
+      <details class="plank" id="parking">
+        <summary><h3>Parking</h3><span class="ask">Contrary to popular belief, there are solutions.</span><span class="sign"></span></summary>
+        <div class="body2">
+          <p class="lbl">Why this matters</p>
+          <p>We need to get parking under control.</p>
+          <p class="lbl">How I’d fix it</p>
+          <p><b>Approach all of the parking in Old Town as one cohesive network.</b> Right now the city makes decisions about beach lots, Main Street and its adjacent lots and residential parking all in a bubble, when they should always be looking at things as a whole, because a change to one area always affects the rest.</p>
+          <p><b>Stop treating the beach parking lots like revenue piñatas.</b> The city looks at each lot to see how much money it can extract from it. Usually the beach lots sit empty all winter. We need to adjust the parking rates to match demand, summer and winter, weekday and weekend, because empty parking stalls hurt everyone.</p>
+          <p><b>No parking structure.</b> Bottom line, the cost of a parking structure, for the actual number of additional stalls we would get out of it, would be nowhere near worth it. Plus, pulling more traffic onto Old Town’s residential streets is the last thing we should be doing. Also, there are better, cheaper options. See the next two points.</p>
+          <p><b>Add parking along both sides of the Greenbelt on Electric Avenue.</b> There is more than enough room, and we have done it before <a href="#" id="ea2011Link" role="button" aria-haspopup="dialog">temporarily</a>. It could add more than 200 stalls with very little cost to the city. The Greenbelt has a great connection to Main Street, so it is an easy way for visitors to park and walk to Main Street. It would also be traffic calming for a street that cars currently drive way too fast on. The parked cars would act as a buffer between the street and the park. I love playing on the Greenbelt with my kids, but sometimes it can be uncomfortable how close we are to cars going 30+ mph.</p>
+          <p><b>Do not let Caltrans off the hook for the PCH parking.</b> When they reconfigured PCH last year, we lost more than 150 parking stalls. It was not because they had no other option. It was because they were lazy. The street has more than enough width for both the parking and the bike lane. I have <a href="https://www.sunnews.org/guest-opinion-pedestrian-safety-at-intersections-along-pch/" target="_blank" rel="noopener">written in the Sun</a> and <a href="https://www.youtube.com/watch?v=z9SO0RYjzCM&amp;t=565s" target="_blank" rel="noopener">presented to the city council</a> about what they should have pushed for. They failed us. I would make sure Caltrans understands their laziness has a direct impact on us.</p>
         </div>
       </details>
 
@@ -685,6 +713,9 @@
   </div>
 </section>
 
+<div id="ea2011Lightbox" style="position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:5vw;background:rgba(33,40,38,.78);backdrop-filter:blur(5px);cursor:zoom-out;">
+  <img src="assets/electric-ave-2011.jpg" alt="Electric Avenue, April 2011 — cars parked along both sides of the Greenbelt" style="max-width:100%;max-height:80vh;border-radius:8px;box-shadow:0 40px 90px -40px rgba(0,0,0,.7);">
+</div>
 <div id="signLightbox" style="position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:5vw;background:rgba(33,40,38,.78);backdrop-filter:blur(5px);cursor:zoom-out;">
   <img src="assets/yard-sign-2026.jpg" alt="Matthew Terry yard sign, enlarged" style="max-width:100%;max-height:90vh;border-radius:8px;box-shadow:0 40px 90px -40px rgba(0,0,0,.7);">
 </div>
@@ -706,6 +737,14 @@
   function close(){ lb.style.display='none'; document.body.style.overflow=''; }
   th.addEventListener('click',open);
   lb.addEventListener('click',close);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&lb.style.display==='flex') close(); });
+})();
+(function(){
+  var link=document.getElementById('ea2011Link'), lb=document.getElementById('ea2011Lightbox');
+  if(!link||!lb) return;
+  function close(){ lb.style.display='none'; document.body.style.overflow=''; }
+  link.addEventListener('click',function(e){ e.preventDefault(); lb.style.display='flex'; document.body.style.overflow='hidden'; });
+  lb.addEventListener('click',function(e){ if(e.target.tagName!=='A') close(); });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&lb.style.display==='flex') close(); });
 })();
 </script>
@@ -1757,6 +1796,12 @@
       es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
     },{threshold:.15});
     document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+    /* no-scroll fallback: renderers that never scroll still get the content. A real scroll cancels it. */
+    var revealFallback = setTimeout(function(){
+      document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+      io.disconnect();
+    }, 3000);
+    window.addEventListener('scroll', function(){ clearTimeout(revealFallback); }, {passive:true, once:true});
   } else {
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
   }
