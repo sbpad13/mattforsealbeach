@@ -1,19 +1,13 @@
 /* =========================================================================
-   pano-sign.js — the FINALIZED Sunset panorama, exactly as it appears on the
-   yard sign / rulebook. Wraps the hand-traced window.SKETCH_PANO (from
-   sketch-pano.js, a 1:1 trace of the candidate's sketch in uploads/dsfa.pdf)
-   with the approved "short-pier" render recipe + Sunset piece coloring.
-
-   This is the ONE source of truth for the panorama on the website. The old
-   procedural skyline in district-art.js is NOT the identity art — do not use
-   it for the panorama.
+   pano-sign.js — the panorama, as it appears on the yard sign. Wraps the traced
+   window.SKETCH_PANO (from sketch-pano.js) with the short-pier render recipe
+   and the Sunset piece colouring. One source of truth for the panorama.
 
    Requires: window.SKETCH_PANO (load sketch-pano.js first).
 
    API:
      PanoSign.viewBox            -> "255.5 0 1543.7 166"  (the cropped frame)
      PanoSign.inner({seal})      -> SVG inner markup string (paths/groups)
-     PanoSign.css                -> <style> text: .pano piece colors+lineweights
      PanoSign.render(svgEl,opts) -> sets viewBox + innerHTML on an <svg class="pano">
    ========================================================================= */
 (function () {
@@ -110,9 +104,9 @@
         '1697.9': 'transom', '1721.4': 'transom'                    // 300-I transom bar
       };
       function win(st, x, y, w, h) {
-        var r = w / 2, cx = x + w / 2;
+        var r = w / 2;
         var rect = 'M' + f(x) + ' ' + f(y) + ' L' + f(x + w) + ' ' + f(y) + ' L' + f(x + w) + ' ' + f(y + h) + ' L' + f(x) + ' ' + f(y + h) + ' Z';
-        // interior mullion/transom/cross lines removed per review — variety now reads only from the window OUTLINE (arched vs square)
+        // no interior mullion / transom lines — variety now reads only from the window OUTLINE (arched vs square)
         if (st === 'arch') return 'M' + f(x) + ' ' + f(y + h) + ' L' + f(x) + ' ' + f(y + r) + ' A' + f(r) + ' ' + f(r) + ' 0 0 1 ' + f(x + w) + ' ' + f(y + r) + ' L' + f(x + w) + ' ' + f(y + h) + ' Z';
         return rect;
       }
@@ -232,42 +226,8 @@
     return { viewBox: '255.5 0 1543.7 166', inner: INNER };
   }
 
-  // (pier_ground foregrounding handled inside build, just before return)
-
-  var CSS =
-    '.pano path{fill:none;stroke:var(--m-line);stroke-linejoin:round;stroke-linecap:round;stroke-width:1.4;}'
-    + '.pano circle{fill:none;stroke:var(--m-people);stroke-width:0.8;}'
-    + '.pano [data-piece="pier_ground"]{stroke:var(--m-ground);stroke-width:3.8;}'
-    + '.pano [data-piece="pier_deck_water"]{stroke:var(--m-wood);stroke-width:3.8;}'
-    + '.pano [data-piece="piers"]{stroke:var(--m-wood);stroke-width:1.7;}'
-    + '.pano [data-piece="pier_rail"]{stroke:var(--m-wood);stroke-width:1.1;}'
-    + '.pano [data-piece="pier_bracing"]{stroke:var(--m-wood);stroke-width:0.95;}'
-    + '.pano [data-piece="ocean"]{stroke:var(--m-water);stroke-width:3.2;}'
-    + '.pano [data-piece="beach"]{stroke:var(--m-beach);stroke-width:3.2;}'
-    + '.pano [data-piece$="_block"]{fill:none;stroke:var(--m-line);stroke-width:2.7;}'
-    + '.pano [data-piece="lifeguard_tower"]{stroke:var(--m-tower);stroke-width:2.2;}'
-    + '.pano .hist-piece path{stroke:var(--m-ghost);stroke-width:0.8;}'
-    + '.pano [data-piece="redcar"] path{stroke:var(--m-red);stroke-width:1.3;}'
-    + '.pano [data-piece="redcar"] circle{stroke:var(--m-red);stroke-width:1.3;fill:none;}'
-    + '.pano [data-piece="cyclist"],.pano [data-piece="cyclist"] path{stroke:var(--m-people);stroke-width:0.8;fill:none;}'
-    + '.pano [data-piece="pedestrian"],.pano [data-piece="pedestrian"] path,.pano [data-piece="pedestrian"] circle{fill:var(--m-people);stroke:none;}'
-    + '.pano [data-piece="cyclist"],.pano [data-piece="cyclist"] path{stroke-width:1.1;}'
-    + '.pano [data-piece="cyclist"] circle{stroke:var(--m-people);}'
-    + '.pano [data-piece="bldg_detail"] path{fill:none;stroke:var(--m-line);stroke-width:1.2;}'
-    + '.pano [data-piece="pier_lamp"] .lpost{stroke:var(--m-pole,#2e3b34);stroke-width:1.0;}'
-    + '.pano [data-piece="pier_lamp"] .lcollar{stroke:var(--m-pole,#2e3b34);stroke-width:1.2;}'
-    + '.pano [data-piece="pier_lamp"] .lcap{fill:var(--m-pole,#2e3b34);stroke:none;}'
-    + '.pano [data-piece="pier_lamp"] .lglobe{fill:var(--m-globe,#d3dee7);stroke:var(--m-pole,#2e3b34);stroke-width:0.6;}'
-    + '.pano [data-piece="pier_lamp"] .lfacet{stroke:var(--m-pole,#2e3b34);stroke-width:0.4;fill:none;opacity:0.4;}'
-    + '.pano [data-piece="tree_canopy"]{stroke:var(--m-tree,#6f8a5c);stroke-width:1.3;}'
-    + '.pano [data-piece="tree_trunk"]{stroke:var(--m-wood);stroke-width:1.6;}'
-    + '.pano [data-piece="tree_branch"]{stroke:var(--m-wood);stroke-width:1.4;}'
-    + '.pano [data-piece="seal"]{stroke:none;}'
-    + '.pano .fl{display:none;}';
-
   window.PanoSign = {
     get viewBox() { return '255.5 0 1543.7 166'; },
-    css: CSS,
     inner: function (opts) { return build(opts).inner; },
     build: build,
     render: function (svgEl, opts) {
