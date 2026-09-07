@@ -1642,12 +1642,14 @@ document.addEventListener('DOMContentLoaded',function(){
       if(toNight){
         /* SUN -> NIGHT: sky-wheel rotates CCW while the sun arcs DOWN (sets, CCW) and the scene holds at day; then the scene eases day->night (moon fading in with it) and the wheel dissolves over the settled night sky. */
         var endT=0.5;
+        var sd=0.5-startT; if(sd<0)sd+=1;   // always advance the clock FORWARD to night — a morning start used to run time backwards, which sent the moon up clockwise (and reversed the dusk palette)
+        var sspan=Math.max(0.14, ((0.32-startT)%1+1)%1);   // arc span sized so the sun always rides PAST the set point (t=0.25, altS=0) — a fixed 0.25 span left a morning sun frozen mid-sky, still lit, while the scene went to night
         if(heroLight&&heroLight.staggerWin) heroLight.staggerWin(SCENE0+250, SCENE+2200);   // windows come home one by one — some through the twilight, the rest popping on over ~2s after the wheel clears, same feel as real dusk
         (function step(now){
           var ms=now-t0;
-          var ae=eio(clmp(ms/SPIN,0,1)), ts=startT+0.25*ae, altS=Math.cos(TAU2*ts);   // sun rides its own quarter-turn arc down (CCW), then stays set
+          var ae=eio(clmp(ms/SPIN,0,1)), ts=startT+sspan*ae, altS=Math.cos(TAU2*ts);   // sun rides its arc down (CCW) past the horizon, then stays set
           var sp=lin((ms-SCENE0)/SCENE);
-          applyTime(((startT+(endT-startT)*sp)%1+1)%1);   // day held (sp=0) until the wheel covers the sky, then eased to night with a twilight linger
+          applyTime(((startT+sd*sp)%1+1)%1);   // day held (sp=0) until the wheel covers the sky, then eased to night with a twilight linger
           moon.style.translate='0px '+(14*(1-sp)).toFixed(2)+'px';   // the moon RISES those last few px as it fades in, instead of just appearing
           sun.setAttribute('transform','translate('+(505-Math.sin(TAU2*ts)*150).toFixed(2)+','+(124-192*Math.max(altS,0)).toFixed(2)+')');   // same arc amplitude as render() — no jump at click
           sun.setAttribute('opacity', clmp((altS+0.02)/0.28,0,1).toFixed(3));
@@ -1661,14 +1663,14 @@ document.addEventListener('DOMContentLoaded',function(){
       /* MOON -> DAY: the moon SETS (drifts down while fading) as the sky-wheel rotates CCW and the scene holds at night; then the scene eases night->day (the sun rising with it) and the wheel dissolves over the settled day sky. */
       var d=target-startT; if(d<0)d+=1;   // advance time FORWARD so the arc runs counterclockwise
       var endT=((startT+d)%1+1)%1, moon0=parseFloat(getComputedStyle(moon).opacity||'1');
-      var mspan=Math.max(0.14, 0.90-startT);   // arc span sized so the moon always rides down PAST the fade-out altitude (altM≤-0.75) — a fixed 0.30 span left it frozen half-visible above the pier for the rest of the dawn
+      var mspan=Math.max(0.14, ((0.82-startT)%1+1)%1);   // mirrors the sunset span exactly: sized so the moon always rides PAST its set point (t=0.75, altM=0) and ends below the horizon, whatever the hour
       (function step(now){
         var ms=now-t0;
         var sp=lin((ms-SCENE0)/SCENE);
         applyTime(((startT+d*sp)%1+1)%1);   // night held (sp=0) until the wheel covers the sky, then eased to day with a dawn linger
         var ae2=eio(clmp(ms/SPIN,0,1)), tm=startT+mspan*ae2, altM=-Math.cos(TAU2*tm);   // the moon arcs DOWN past the horizon (CCW, mirroring the sunset) — same arc math as render()
         moon.setAttribute('transform','translate('+(505+Math.sin(TAU2*tm)*150-631).toFixed(2)+','+(54-96*altM-22).toFixed(2)+')');   // no altitude clamp: it rides the arc all the way down to the water line
-        moon.setAttribute('opacity', (moon0*clmp((altM+0.62)/0.78,0,1)).toFixed(3));   // fully faded by altM=-0.62 (y≈113) — gone before it reaches the pier deck
+        moon.setAttribute('opacity', (moon0*clmp((altM+0.02)/0.28,0,1)).toFixed(3));   // same horizon fade ramp as the sun
         if(ms<dur){ tweenId=requestAnimationFrame(step); }
         else { tweenId=0; if(safety){clearTimeout(safety);safety=0;} revealActive=false; manualT=endT; moon.removeAttribute('opacity'); sun.removeAttribute('opacity'); moon.style.translate=''; moon.removeAttribute('transform'); applyTime(endT); }
       })(t0);
