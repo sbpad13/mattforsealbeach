@@ -770,6 +770,9 @@
     dlg.showModal();
     try{ history.pushState({viewer:1},''); pushed=true; }catch(e){ pushed=false; }
     dlg.focus();   /* no close control: tap outside, Escape or the back gesture dismiss it */
+    /* Firefox's showModal() focuses the panel's only focusable child - the source link at the
+       very bottom - and scrolls the panel to it; dlg.focus() takes focus back but not the scroll. */
+    vbody.scrollTop=0; if(vbody.firstElementChild) vbody.firstElementChild.scrollTop=0;
   }
   var closing=false;
   /* one teardown path, whatever dismissed it: unload the player, pop our history entry, hand focus back */
