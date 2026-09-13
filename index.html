@@ -116,6 +116,15 @@
   .nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(var(--c-bg),.86);backdrop-filter:blur(10px);
        border-bottom:1px solid rgba(var(--c-line),.12);}
   .nav .row{display:flex;align-items:center;gap:24px;height:64px;}
+  body{--bh:38px;}
+  .evt{background:var(--m-red);color:#fdf6e6;}
+  .evt .wrap{min-height:var(--bh);display:flex;align-items:center;justify-content:center;padding:7px 24px;}
+  .evt p{margin:0;font-family:var(--fmono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;text-align:center;line-height:1.5;display:flex;flex-wrap:wrap;justify-content:center;column-gap:.55em;row-gap:2px;}
+  .evt p span{white-space:nowrap;}
+  .evt p span:last-child{white-space:normal;}
+  .evt p span:not(:last-child)::after{content:"\00b7";margin-left:.55em;opacity:.7;}
+  .evt b{font-weight:700;}
+  @media(max-width:560px){body{--bh:56px;}.evt p{font-size:10.5px;letter-spacing:.06em;}}
   .hero h1 .wm-matt{color:var(--teal);} .hero h1 .wm-terry{color:var(--m-red);}
   .nav-links{display:flex;gap:34px;margin:0 auto;}
   .nav-links a{font-family:var(--fbody);font-weight:600;font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;color:rgb(var(--c-fgdim));padding:6px 0;transition:color .15s;}
@@ -142,14 +151,14 @@
   @media (forced-colors:active){.menu-toggle[aria-expanded="true"] span{border-top-style:hidden;}}
   .menu-toggle[aria-expanded="true"] span::before{transform:translateY(6px) rotate(45deg);}
   .menu-toggle[aria-expanded="true"] span::after{transform:translateY(-6px) rotate(-45deg);}
-  .mobile-menu{position:fixed;inset:64px 0 auto 0;z-index:48;background:var(--sand);border-bottom:1px solid rgba(var(--c-line),.14);
+  .mobile-menu{position:absolute;top:100%;left:0;right:0;z-index:48;background:var(--sand);border-bottom:1px solid rgba(var(--c-line),.14);
     transform:translateY(-120%);visibility:hidden;transition:transform .32s cubic-bezier(.4,.0,.2,1),visibility .32s;box-shadow:0 20px 40px -24px rgba(40,38,30,.5);}
   .mobile-menu.open{transform:translateY(0);visibility:visible;}
   .mobile-menu a{display:block;padding:18px 32px;font-family:var(--fbody);font-weight:700;font-size:20px;text-decoration:none;color:var(--ink);border-top:1px solid rgba(var(--c-line),.1);}
   .mobile-menu a:first-child{border-top:none;}
 
   /* ---------- HERO ---------- */
-  .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;padding-top:64px;}
+  .hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;position:relative;padding-top:var(--navh,113px);}
   /* the hero sky paints on a z-index:-1 layer so it sits BELOW the fixed sky-wheel (z0) in the root stacking context — during the sun/moon spin the wheel covers hero background and page alike, so no seam can flash at the card edge */
   .hero-bg{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
         background:linear-gradient(180deg, #f1ebdf 0%, #efe6d0 38%, #ecddc4 60%, #ecd2ac 80%, rgba(236,208,166,0) 100%);}
@@ -265,7 +274,8 @@
   @media(max-width:860px){
     .ig{grid-template-columns:1fr;gap:34px;}
     .vote{margin-top:34px;}
-    .nav{position:static;background:var(--sand);backdrop-filter:none;}
+    .nav{position:relative;padding-top:var(--bh);background:var(--sand);backdrop-filter:none;}
+    .evt{position:fixed;top:0;left:0;right:0;z-index:51;}
     .nav-links{display:none;}
     .menu-toggle{display:flex;}
     .hero{padding-top:0;min-height:calc(100svh - 68px);} /* nav is static here — keep wordmark + panorama inside the first screen */
@@ -304,7 +314,6 @@
   }
   /* short viewports (landscape phones, shallow windows): compact the hero's vertical rhythm so wordmark + panorama share the fold */
   @media(max-height:560px){
-    .hero{padding-top:52px;}
     .hero-top{padding:18px 32px 4px;}
     .hero .tagline{margin-top:12px;gap:8px;}
     .hero-pano-wrap{margin-bottom:22px;}
@@ -441,6 +450,7 @@
 
 <!-- NAV -->
 <nav class="nav">
+  <div class="evt"><div class="wrap"><p><span><b>Open house / meet and greet</b></span><span>Sat Sept 19, 1–4 PM</span><span>341 13th Street</span><span>Come by, say hi, let’s talk Seal Beach</span></p></div></div>
   <div class="wrap">
     <div class="row">
       <div class="nav-links">
@@ -460,6 +470,7 @@
   <a href="#yardsign">Want a yard sign?</a>
 </div>
 </nav>
+<script>(function(){var e=document.querySelector('.evt');if(!e)return;var n=e.parentElement,ok=false;var set=function(){var bh=e.offsetHeight,nh=n.offsetHeight;if(!bh||!nh)return;ok=true;document.body.style.setProperty('--bh',bh+'px');document.body.style.setProperty('--navh',getComputedStyle(n).position==='fixed'?nh+'px':'0px');};var poll=function(t){set();if(!ok&&t<3000)requestAnimationFrame(function(){poll(t+16);});};poll(0);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(set);addEventListener('load',set);addEventListener('pageshow',set);addEventListener('resize',set);if(window.ResizeObserver){var ro=new ResizeObserver(set);ro.observe(e);ro.observe(n);}})();</script>
 
 <!-- HERO -->
 <header class="hero draw" id="top">
@@ -526,7 +537,7 @@
           <p>I was at the water rate meetings giving <a href="https://www.youtube.com/watch?v=GTrRJrOFoio&amp;t=3424s" data-video="GTrRJrOFoio" data-t="3424" aria-haspopup="dialog">presentation</a> after <a href="https://www.youtube.com/watch?v=DlL4texvusc&amp;t=4962s" data-video="DlL4texvusc" data-t="4962" aria-haspopup="dialog">presentation</a> after <a href="https://www.youtube.com/watch?v=gSA5B6AOCdI&amp;t=4737s" data-video="gSA5B6AOCdI" data-t="4737" aria-haspopup="dialog">presentation</a> showing the city council the issue with their approach to calculating the new water rates needed to cover the cost of replacing our aging water infrastructure.</p>
           <p>My presentations go into greater detail, but the gist of it is: normally, when a water line is installed down a street, the city uses the development on both sides of the water line to absorb the line’s capital costs. However, in Seal Beach we cannot develop along miles of our water line because of the Naval Weapons Station, and what the base pays doesn’t come close to covering its share of those costs.</p>
           <p>The difference gets picked up by the rest of us.</p>
-          <p class="lbl">How I’d fix it</p>
+          <p class="lbl">What I’ll do</p>
           <p><b>Make the Navy pay its fair share.</b> If elected, I will push my colleagues on the council to revisit our water rates and look at moving the Naval Weapons Station to a service-based agreement, because the current system treats the base like any other business instead of the unique customer it actually is.</p>
         </div>
       </details>
@@ -536,7 +547,7 @@
         <div class="body2">
           <p class="lbl">Why this matters</p>
           <p>Main Street is our heart and our identity. People pay a lot of money to go to Disneyland to experience Main Street, U.S.A., while we get to experience the real thing every day. So, it’s important that we do everything we possibly can to ensure its success.</p>
-          <p class="lbl">How I’d fix it</p>
+          <p class="lbl">What I’ll do</p>
           <p><b>Make Main Street parking better.</b> A few years ago I served on the Citizen-Council Parking Advisory Ad Hoc Committee, so I’ve been deep in the weeds on parking in Old Town, and I came away clear on a few things.</p>
           <p>First, whether you’re for or against paid parking, we have to do something different than what we have now because the parking system on Main Street is broken. Two decades ago a previous council backpedaled on implementing paid parking and left Main Street free while keeping the three adjacent lots paid. This is backwards and it’s resulted in the underuse of the lots and more traffic on Main Street.</p>
           <p>Second, the city incorrectly looks at each parking lot from the perspective of how much money it can extract, and it consistently makes decisions about parking in one area without considering how that affects everything else. There’s more on both of those in the <a href="#parking">parking section of my priorities page</a>.</p>
@@ -555,7 +566,6 @@
             <p><b>Simplify sidewalk permits for shops.</b> The process for a business to get a permit from the city to put out tables or merchandise racks on the sidewalk is immensely overcomplicated. As I mentioned <a href="https://www.youtube.com/watch?v=jxaa60P0dT4&amp;t=1218s" data-video="jxaa60P0dT4" data-t="1218" aria-haspopup="dialog">at the Planning Commission meeting when this was first proposed</a>, the process should be as simple as paying a fee, signing an agreement and following the rules.</p>
             <p><b>Modernize the Main Street Specific Plan.</b> It’s the plan that governs everything on Main Street, and it’s out of date. It was written in the 1990s and has only been patched piecemeal since. It’s time for a full review.</p>
             <p><b>Give Main Street properties more ways to earn, so shops don’t carry it all.</b> Rents are high on Main Street, and on many parcels a single shop is carrying the whole property by itself. I would work with both the property owners and the shops to see how the city could encourage building housing on parcels that have room for it in the back. Building housing gives a parcel a secondary source of income, with the added benefit of more customers for Main Street. When a parcel earns from housing too, the shop’s rent no longer has to cover the whole property.</p>
-            <p><b>Finish the Local Coastal Program.</b> Seal Beach should be able to make its own decisions about Main Street, but right now the Coastal Commission has the final say. We need to finish our Local Coastal Program so the final say belongs to us.</p>
         </div>
       </details>
 
@@ -564,7 +574,7 @@
         <div class="body2">
           <p class="lbl">Why this matters</p>
           <p>We need to get parking under control.</p>
-          <p class="lbl">How I’d fix it</p>
+          <p class="lbl">What I’ll do</p>
           <p><b>Approach all of the parking in Old Town as one cohesive network.</b> Right now the city makes decisions about beach lots, Main Street and its adjacent lots and residential parking all in a bubble, when they should always be looking at things as a whole, because a change to one area always affects the rest.</p>
           <p><b>Stop treating the beach parking lots like revenue piñatas.</b> The city looks at each lot from the perspective of how much money it can extract from it and because of that the beach lots usually sit empty all winter. We need to adjust the parking rates to match demand, summer and winter, weekday and weekend, because empty parking stalls hurt everyone.</p>
           <p><b>No parking structure.</b> Considering the actual number of additional stalls we would get out of it, the cost of a parking structure will never be worth it. Plus, pulling more traffic onto Old Town’s residential streets is the last thing we should be doing. Also, there are better, cheaper options. See the next two points.</p>
@@ -580,7 +590,7 @@
           <p>Over the past decade we voted to raise our sales tax twice. Both times it was sold as a fix, but it was really just a stopgap measure. The permanent solution never came. Now we are at the state’s sales tax cap.</p>
           <p>Budget cuts are always an option, but they won’t close a gap this size. Also, tourism is not the answer. The perpetual idea of building it into a larger revenue stream is a pipe dream because that is not how Seal works. The city is pulling the last easy revenue levers, and still the long-range financial forecast is negative.</p>
           <p>Making things worse, we lean heavily on our big-box stores at a time when their popularity is declining, and our revenue streams are out of date with how society has changed, so those streams will only lag further behind. The city has said it has no ideas for a new large revenue stream. We need to solve this issue so we hand off a financially healthy Seal Beach to the next generation.</p>
-          <p class="lbl">How I’d fix it</p>
+          <p class="lbl">What I’ll do</p>
           <p>The most common response to a budget gap is to audit the spending. But that is only half the job. Nobody ever audits the revenue our land produces for the city.</p>
           <p>In fact, our most valuable revenue generator is our land. So managing it well is one of the most important jobs the council has.</p>
           <p>We have rightly put much of this town off limits to development to protect our small-town charm, but that leaves us dependent on a handful of commercial shopping centers to support the city. Our entire revenue system is built on growth. That is why, as counterintuitive as it sounds, to protect our neighborhoods we need to develop our underperforming shopping centers.</p>
@@ -601,7 +611,7 @@
         <div class="body2">
           <p class="lbl">Why this matters</p>
           <p>This one is personal for me. I have three kids, and I want our neighborhood to be the best it can be when it comes to making streets safer, for them and the whole community.</p>
-          <p class="lbl">How I’d fix it</p>
+          <p class="lbl">What I’ll do</p>
           <p><b>Pay closer attention to what we build.</b> No street is perfect, and every street in the district has a way it could be better. But every time the city works on one, it just gets rebuilt exactly the way it was before. I would work with Public Works on a master plan for the district’s streets covering crosswalks, stop signs, sidewalks, bike routes and speeding. Then when a street’s turn comes up, we already know what better looks like, and we build that instead of repeating the past and inheriting its mistakes.</p>
           <p><b>PCH.</b> Caltrans does not care about pedestrians. It’s as simple as that. PCH, which is Caltrans-controlled, is a pseudo-freeway bisecting our community, but it’s also a street families cross on a daily basis to get to school, to swim lessons, to baseball practice. I’ve <a href="https://www.youtube.com/watch?v=z9SO0RYjzCM&amp;t=565s" data-video="z9SO0RYjzCM" data-t="565" aria-haspopup="dialog">presented on it</a> and <a href="https://www.sunnews.org/guest-opinion-pedestrian-safety-at-intersections-along-pch/" data-oped="ed-pch" aria-haspopup="dialog">written about it</a>, and I’ve personally crossed that street on foot over ten thousand times, and the fact is every day our neighbors cross a street that is unnecessarily dangerous, and Caltrans does nothing about it. The latest work Caltrans did on PCH offered the city a rare opportunity to make the street better, and the only thing our city council pressured Caltrans about was the landscaping in the median. If elected, I will make it very clear to Caltrans that we are not putting up with this anymore.</p>
           <p><b>Close the OC Loop gap.</b> The OC Loop is a 66-mile protected bike route that circles Orange County along the San Gabriel and Santa Ana rivers and the coast. 88% of it is already built, and the county is closing the few remaining gaps right now, but the stretch between Surfside and Old Town has stalled out. As proposed, it would be a separated path spanning the bay, for bikes and pedestrians and a much-needed connection between Surfside and the rest of the city. This would be a win for Main Street too because families on bikes fill the beach path south of here every weekend, and they all turn around at the gap because nobody wants to ride PCH. Close the gap and that’s a lot of potential Main Street customers who don’t need a parking spot and don’t add to traffic. What makes it possible is that projects like this get built with county, state and federal money, so this is something meaningful that can get built even under our current budget situation. If elected, I will do everything I can to go get that funding.</p>
@@ -609,13 +619,15 @@
       </details>
 
       <details class="plank" id="our-coast">
-        <summary><h3>Local Coastal Program</h3><span class="ask">Right now the Coastal Commission, not Seal Beach, has the final say on development near our coast.</span><span class="sign"></span></summary>
+        <summary><h3>Our Beach</h3><span class="ask">The beach is why we’re here.</span><span class="sign"></span></summary>
         <div class="body2">
           <p class="lbl">Why this matters</p>
-          <p>Anything the city wants to do near the coast has to get approved by the state first. That makes everything take longer and cost more than it should. The Local Coastal Program is the city’s own set of coastal rules. Ours is not finished yet.</p>
-          <p class="lbl">How I’d fix it</p>
-          <p><b>Finish the plan.</b> This has been a work in progress for decades. The state gave us grant money to see it through, and that grant eventually expires. We need to get this done. If elected, I will make finishing our Local Coastal Program a priority.</p>
-                  </div>
+          <p>A lot of time and effort has gone into making our coast better. It’s time to see it through.</p>
+          <p class="lbl">What I’ll do</p>
+          <p><b>Local Coastal Program.</b> Right now the Coastal Commission, not Seal Beach, has the final say on development near our coast. Anything the city wants to do near the coast has to get approved by the state first, which makes everything take longer and cost more than it should. The Local Coastal Program is the city’s own set of coastal rules, and ours is not finished yet. This has been a work in progress for decades. The state gave us grant money to see it through, and that grant eventually expires. We need to get this done. If elected, I will make finishing our Local Coastal Program a priority.</p>
+          <p><b>Surfside Sand Replenishment.</b> This is nothing new. For decades the Army Corps of Engineers has been fixing a problem the Naval Weapons Station created, and I will make sure we continue to hold them to it.</p>
+          <p><b>San Gabriel River Trash.</b> The city has put years of work into finally stopping the trash that comes down the river and pollutes our beach. I will see it through.</p>
+        </div>
       </details>
 
     </div>
@@ -768,11 +780,11 @@
     dlg.className=mode;                                    /* image | video | text */
     dlg.setAttribute('aria-label',label||'Viewer');
     dlg.showModal();
-    try{ history.pushState({viewer:1},''); pushed=true; }catch(e){ pushed=false; }
+    /* showModal() focuses the first focusable descendant and scrolls it into view — in the reprint that is
+       the outbound link at the foot of the panel, which opened the text already scrolled to its end */
     dlg.focus();   /* no close control: tap outside, Escape or the back gesture dismiss it */
-    /* Firefox's showModal() focuses the panel's only focusable child - the source link at the
-       very bottom - and scrolls the panel to it; dlg.focus() takes focus back but not the scroll. */
-    vbody.scrollTop=0; if(vbody.firstElementChild) vbody.firstElementChild.scrollTop=0;
+    vbody.scrollTop=0; if(node&&node.scrollTop) node.scrollTop=0;
+    try{ history.pushState({viewer:1},''); pushed=true; }catch(e){ pushed=false; }
   }
   var closing=false;
   /* one teardown path, whatever dismissed it: unload the player, pop our history entry, hand focus back */
