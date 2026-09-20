@@ -116,7 +116,7 @@
   .nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(var(--c-bg),.86);backdrop-filter:blur(10px);
        border-bottom:1px solid rgba(var(--c-line),.12);}
   .nav .row{display:flex;align-items:center;gap:24px;height:64px;}
-  body{--bh:38px;}
+  body{--bh:0px;}
   .evt{background:var(--m-red);color:#fdf6e6;}
   .evt .wrap{min-height:var(--bh);display:flex;align-items:center;justify-content:center;padding:7px 24px;}
   .evt p{margin:0;font-family:var(--fmono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;text-align:center;line-height:1.5;display:flex;flex-wrap:wrap;justify-content:center;column-gap:.55em;row-gap:2px;}
@@ -124,7 +124,7 @@
   .evt p span:last-child{white-space:normal;}
   .evt p span:not(:last-child)::after{content:"\00b7";margin-left:.55em;opacity:.7;}
   .evt b{font-weight:700;}
-  @media(max-width:560px){body{--bh:56px;}.evt p{font-size:10.5px;letter-spacing:.06em;}}
+  @media(max-width:560px){body{--bh:0px;}.evt p{font-size:10.5px;letter-spacing:.06em;}}
   .hero h1 .wm-matt{color:var(--teal);} .hero h1 .wm-terry{color:var(--m-red);}
   .nav-links{display:flex;gap:34px;margin:0 auto;}
   .nav-links a{font-family:var(--fbody);font-weight:600;font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;color:rgb(var(--c-fgdim));padding:6px 0;transition:color .15s;}
@@ -450,7 +450,6 @@
 
 <!-- NAV -->
 <nav class="nav">
-  <div class="evt"><div class="wrap"><p><span><b>Meet &amp; greet / open house</b></span><span>Sat Sept 19, 1–4 PM</span><span>341 13th Street</span><span>Come by anytime, say hi, let’s talk Seal Beach</span></p></div></div>
   <div class="wrap">
     <div class="row">
       <div class="nav-links">
@@ -470,7 +469,7 @@
   <a href="#yardsign">Want a yard sign?</a>
 </div>
 </nav>
-<script>(function(){var e=document.querySelector('.evt');if(!e)return;var n=e.parentElement,ok=false;var set=function(){var bh=e.offsetHeight,nh=n.offsetHeight;if(!bh||!nh)return;ok=true;document.body.style.setProperty('--bh',bh+'px');document.body.style.setProperty('--navh',getComputedStyle(n).position==='fixed'?nh+'px':'0px');};var poll=function(t){set();if(!ok&&t<3000)requestAnimationFrame(function(){poll(t+16);});};poll(0);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(set);addEventListener('load',set);addEventListener('pageshow',set);addEventListener('resize',set);if(window.ResizeObserver){var ro=new ResizeObserver(set);ro.observe(e);ro.observe(n);}})();</script>
+<script>(function(){var n=document.querySelector('.nav');if(!n)return;var e=document.querySelector('.evt'),ok=false;var set=function(){var bh=e?e.offsetHeight:0,nh=n.offsetHeight;if(!nh)return;ok=true;document.body.style.setProperty('--bh',bh+'px');document.body.style.setProperty('--navh',getComputedStyle(n).position==='fixed'?nh+'px':'0px');};var poll=function(t){set();if(!ok&&t<3000)requestAnimationFrame(function(){poll(t+16);});};poll(0);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(set);addEventListener('load',set);addEventListener('pageshow',set);addEventListener('resize',set);if(window.ResizeObserver){var ro=new ResizeObserver(set);if(e)ro.observe(e);ro.observe(n);}})();</script>
 
 <!-- HERO -->
 <header class="hero draw" id="top">
