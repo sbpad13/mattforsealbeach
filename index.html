@@ -345,6 +345,9 @@
 .prose{max-width:none;}
 .prose p{font-size:clamp(17px,1.5vw,19px);line-height:1.66;color:rgb(var(--c-fgsoft));margin-top:18px;text-wrap:pretty;}
 .prose p.first{margin-top:24px;}
+.work-grid{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:36px;align-items:start;}
+.work-photo{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:16px;margin-top:30px;}
+@media(max-width:700px){.work-grid{grid-template-columns:1fr;gap:0;}.work-photo{max-width:340px;}}
 .planks{margin-top:34px;display:flex;flex-direction:column;gap:10px;}
 .plank{border:1px solid rgba(var(--c-line),.16);border-radius:16px;background:rgba(var(--c-glass),.4);overflow:hidden;transition:border-color .15s,box-shadow .2s,transform .12s;}
 @media (hover:hover){.plank:hover{border-color:rgba(var(--c-line),.3);transform:translateY(-1px);box-shadow:0 16px 40px -30px rgba(40,38,30,.5);}}
@@ -514,9 +517,12 @@
   <div class="wrap"><div class="reveal">
     <span class="kick">What I do for a living</span>
     <h2 class="big">I’m an architect.</h2>
-    <div class="prose">
-      <p class="first">More specifically, the BIM Director at Common Arts, an architecture firm in downtown Long Beach, where I’ve worked since 2013.</p>
-      <p>At its most basic, my job is about integrating technology into the architecture practice to make the company better and more efficient at what it does. I develop the standards, workflows and automations that over a hundred people rely on every day, I teach and train the teams that use the things I develop and I troubleshoot whatever comes up in between.</p>
+    <div class="work-grid">
+      <div class="prose">
+        <p class="first">More specifically, the BIM Director at Common Arts, an architecture firm in downtown Long Beach, where I’ve worked since 2013.</p>
+        <p>At its most basic, my job is about integrating technology into the architecture practice to make the company better and more efficient at what it does. I develop the standards, workflows and automations that over a hundred people rely on every day, I teach and train the teams that use the things I develop and I troubleshoot whatever comes up in between.</p>
+      </div>
+      <img class="work-photo" src="assets/headshot-2026.jpg" alt="Matthew Terry" width="800" height="800" loading="lazy" decoding="async">
     </div>
   </div></div>
 </section>
