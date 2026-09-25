@@ -239,14 +239,22 @@
   .ig>.reveal{min-width:0;}
   .signcard{background:rgb(var(--c-panelteal));color:rgb(var(--c-ondark));border-radius:16px;padding:38px 36px;}
   .signcard h3{color:rgb(var(--c-ondark));font-weight:800;font-size:30px;}
+  .signcard h3 .nb{white-space:nowrap;}
   .signcard p.s{color:rgba(var(--c-ondark),.8);margin-top:10px;font-size:15px;}
   .signcard .btn{margin-top:22px;width:100%;justify-content:center;}
-  .signrow{display:flex;gap:10px;margin-top:18px;}
-  .signrow input{flex:1;min-width:0;width:0;background:rgba(var(--c-ondark),.1);border:1px solid rgba(var(--c-ondark),.28);border-radius:8px;padding:13px 15px;color:rgb(var(--c-ondark));font-family:var(--fbody);font-size:16px;}
-  .signrow input::placeholder{color:rgba(var(--c-ondark),.72);}
-  .signrow input:focus{outline:none;border-color:rgba(var(--c-ondark),.85);background:rgba(var(--c-ondark),.16);box-shadow:0 0 0 3px rgba(var(--c-ondark),.18);}
+  .signrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+  .signrow input[type=email]{flex:1;min-width:0;width:0;background:rgba(var(--c-ondark),.1);border:1px solid rgba(var(--c-ondark),.28);border-radius:8px;padding:13px 15px;color:rgb(var(--c-ondark));font-family:var(--fbody);font-size:16px;}
+  .signrow input[type=email]::placeholder{color:rgba(var(--c-ondark),.72);}
+  .signrow input[type=email]:focus{outline:none;border-color:rgba(var(--c-ondark),.85);background:rgba(var(--c-ondark),.16);box-shadow:0 0 0 3px rgba(var(--c-ondark),.18);}
   .signrow .signbtn{flex:none;margin-top:0;width:auto;background:var(--sand);color:var(--teal-d);box-shadow:0 6px 16px -10px rgba(0,0,0,.5);transition:background .15s,color .15s,transform .12s,box-shadow .15s;}
   .signrow .signbtn:hover{transform:translateY(-1px);background:var(--m-red);color:var(--sand);box-shadow:0 9px 20px -10px rgba(0,0,0,.55);}
+  .signopts{display:flex;flex-wrap:nowrap;gap:22px;flex:1 0 100%;order:3;margin:8px 0 0;padding:0;border:0;min-width:0;}
+  .signopts label{display:inline-flex;align-items:center;gap:9px;cursor:pointer;user-select:none;font-family:var(--fbody);font-weight:600;font-size:15px;line-height:1.2;color:rgb(var(--c-ondark));white-space:nowrap;}
+  .signopts input{appearance:none;-webkit-appearance:none;margin:0;width:18px;height:18px;flex:none;border:1.5px solid rgba(var(--c-ondark),.7);border-radius:4px;background:transparent;display:grid;place-content:center;transition:background .15s,border-color .15s;}
+  .signopts input::before{content:"";width:10px;height:10px;transform:scale(0);transition:transform .12s;background:var(--teal-d);clip-path:polygon(14% 44%,0 62%,40% 100%,100% 18%,84% 4%,40% 70%);}
+  .signopts input:checked{background:var(--sand);border-color:var(--sand);}
+  .signopts input:checked::before{transform:scale(1);}
+  .signopts input:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(var(--c-ondark),.3);}
   .contact{background:rgba(var(--c-glass),.4);border:1px solid rgba(var(--c-line),.16);border-radius:16px;padding:24px 26px 22px;}
   .contact h4{font-family:var(--fhead);font-weight:800;letter-spacing:.015em;font-size:22px;margin:0;color:var(--ink);}
   .crow{display:flex;align-items:center;gap:14px;padding:11px 0;text-decoration:none;color:inherit;border-top:1px solid rgba(var(--c-line),.12);transition:transform .12s;}
@@ -296,8 +304,9 @@
   /* narrow phones: a full email must be readable in the field without horizontal scrolling. Staying at 16px (below it iOS zooms on focus), so the field is widened instead — the Submit control drops to its own full-width line and the input takes the whole row. */
   @media(max-width:400px){
     .signrow{flex-wrap:wrap;}
-    .signrow input{flex:1 0 100%;width:100%;padding:13px 12px;font-size:16px;}
+    .signrow input[type=email]{flex:1 0 100%;width:100%;padding:13px 12px;font-size:16px;}
     .signrow .signbtn{flex:1 0 100%;width:100%;justify-content:center;}
+    .signopts{order:0;margin:4px 0 2px;}
   }
   /* narrow phones: the wide-tracked council band is longer than the screen — let it wrap and pull the tracking in */
   @media(max-width:480px){
@@ -309,6 +318,7 @@
     .hero h1 .wm-matt,.hero h1 .wm-terry{margin-right:-.012em;}
   }
   /* phones: keep the cue, tightened so it clears the panorama — it doubles as a tap target to the first section */
+  @media(max-width:780px){.signopts{flex-direction:column;gap:14px;}}
   @media(max-width:700px){
     .scrollcue{bottom:8px;font-size:9.5px;letter-spacing:.2em;gap:5px;padding:6px 14px;}
     .scrollcue .dot{height:15px;}
@@ -698,11 +708,16 @@
           <form id="signform">
             <div style="display:flex;align-items:center;gap:24px;">
               <div style="flex:1;min-width:0;">
-                <h3>Want a yard sign or help out?</h3>
+                <h3><span class="nb">Want a yard sign</span> <span class="nb">or help out?</span></h3>
                 <p class="s">Enter your email below and I’ll get in touch.</p>
                 <div class="signrow" style="margin-top:18px;">
                   <label class="vis-hidden" for="signEmail">Your email address</label>
                   <input id="signEmail" name="email" type="email" placeholder="Email" autocomplete="email" inputmode="email" enterkeyhint="send" spellcheck="false" required>
+                  <fieldset class="signopts" aria-label="How you can help">
+                    <label><input type="checkbox" name="help" value="Yard sign"> Yard sign</label>
+                    <label><input type="checkbox" name="help" value="Door knock"> Door knock</label>
+                    <label><input type="checkbox" name="help" value="Host meet and greet"> Host meet and greet</label>
+                  </fieldset>
                   <button class="btn signbtn" type="submit">Submit</button>
                 </div>
                 <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;top:0;width:1px;height:1px;opacity:0;">
@@ -1780,16 +1795,17 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('signform').addEventListener('submit',function(ev){
     ev.preventDefault();
     var em=(this.querySelector('input[name="email"]').value||'').trim();
+    var hp=Array.prototype.map.call(this.querySelectorAll('input[name="help"]:checked'),function(c){return c.value;}), help=hp.length?hp.join(', '):'(none selected)';
     function done(){ document.getElementById('signform').style.display='none'; document.getElementById('thanks').classList.add('show'); }
     if((this.querySelector('input[name="_honey"]')||{value:''}).value){ done(); return; }   /* honeypot: bots fill hidden fields — quietly drop */
     fetch('https://formsubmit.co/ajax/3a090ad012df3b97eca9fce7e8cace02',{
       method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({email:em, _subject:'Yard sign request', _template:'table', _captcha:'false'})
+      body:JSON.stringify({email:em, help:help, _subject:'Yard sign / help request', _template:'table', _captcha:'false'})
     }).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(j){ if(String(j.success)!=='true') throw 0; done(); }).catch(function(){
       /* relay unreachable: hand off to their mail app, with honest copy — the request isn't sent until THEY hit send */
       var tb=document.querySelector('#thanks .big'), tp=document.querySelector('#thanks p');
       if(tb) tb.textContent='One more step.'; if(tp) tp.textContent='Your email app just opened with the request \u2014 hit send and I\u2019ll be in touch.';
-      window.location.href='mailto:matt@mattforsealbeach.com?subject='+encodeURIComponent('Yard sign request')+'&body='+encodeURIComponent('Hi Matt \u2014 I\u2019d like a yard sign.\n\nReach me at: '+em);
+      window.location.href='mailto:matt@mattforsealbeach.com?subject='+encodeURIComponent('Yard sign / help request')+'&body='+encodeURIComponent('Hi Matt \u2014 I can help with: '+help+'\n\nReach me at: '+em);
       done();
     });
   });
